@@ -20,7 +20,7 @@ ingress:
 # Non-sensitive config
 config:
   NODE_ENV: production
-  DB_HOST: your-rds-endpoint
+  DB_HOST: airline-platform-postgres.ctqs0e4ucayc.ap-south-1.rds.amazonaws.com
   DB_NAME: airline_db
   DB_PORT: "5432"
 
