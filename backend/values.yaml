@@ -4,7 +4,7 @@ namespace: airline
 # Docker image (Jenkins update ചെയ്യും)
 image:
   repository: 899805259415.dkr.ecr.ap-south-1.amazonaws.com/airline-backend
-  tag: "latest"   # Jenkins build number replace ചെയ്യും
+  tag: "8"
 
 # Number of pods
 replicaCount: 2
