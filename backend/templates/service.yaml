@@ -1,0 +1,17 @@
+# Service = stable internal access point
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: airline-backend-service
+  namespace: {{ .Values.namespace }}
+
+spec:
+  type: ClusterIP   # internal access
+
+  selector:
+    app: airline-backend
+
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 5000

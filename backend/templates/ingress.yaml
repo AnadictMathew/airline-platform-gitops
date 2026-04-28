@@ -1,0 +1,27 @@
+# Ingress = expose app to internet (via ALB)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: airline-backend-ingress
+  namespace: {{ .Values.namespace }}
+
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.host }}
+
+spec:
+  ingressClassName: alb
+
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: airline-backend-service
+                port:
+                  number: {{ .Values.service.port }}

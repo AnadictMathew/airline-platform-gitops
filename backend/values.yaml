@@ -1,0 +1,30 @@
+# Namespace where app will run
+namespace: airline
+
+# Docker image (Jenkins update ചെയ്യും)
+image:
+  repository: 899805259415.dkr.ecr.ap-south-1.amazonaws.com/airline-backend
+  tag: "latest"   # Jenkins build number replace ചെയ്യും
+
+# Number of pods
+replicaCount: 2
+
+# Service config
+service:
+  port: 5000
+
+# Public domain
+ingress:
+  host: api.techianadict.online
+
+# Non-sensitive config
+config:
+  NODE_ENV: production
+  DB_HOST: your-rds-endpoint
+  DB_NAME: airline_db
+  DB_PORT: "5432"
+
+# Sensitive config
+secret:
+  DB_USER: postgres
+  DB_PASSWORD: password123

@@ -1,0 +1,36 @@
+# Deployment = main controller for pods
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: airline-backend
+  namespace: {{ .Values.namespace }}
+
+spec:
+  replicas: {{ .Values.replicaCount }}   # number of pods
+
+  selector:
+    matchLabels:
+      app: airline-backend
+
+  template:
+    metadata:
+      labels:
+        app: airline-backend
+
+    spec:
+      containers:
+        - name: backend
+
+          # Docker image (ECR)
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          ports:
+            - containerPort: 5000
+
+          # Inject env variables
+          envFrom:
+            - configMapRef:
+                name: airline-backend-config
+            - secretRef:
+                name: airline-backend-secret
