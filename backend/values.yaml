@@ -16,6 +16,7 @@ service:
 # Public domain
 ingress:
   host: api.techianadict.online
+  certificateArn: arn:aws:acm:ap-south-1:899805259415:certificate/cfdb1f61-6b49-4fdc-b782-d609d3c00520
 
 # Non-sensitive config
 config:
@@ -28,3 +29,5 @@ config:
 secret:
   DB_USER: postgres
   DB_PASSWORD: password123
+
+

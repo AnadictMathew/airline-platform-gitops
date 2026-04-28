@@ -1,27 +1,44 @@
-# Ingress = expose app to internet (via ALB)
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: networking.k8s.io/v1   # Ingress API version (networking group)
+kind: Ingress                      # Object type → external traffic handle ചെയ്യുന്നു
 
 metadata:
-  name: airline-backend-ingress
-  namespace: {{ .Values.namespace }}
+  name: airline-backend-ingress    # Ingress name (unique inside namespace)
+  namespace: {{ .Values.namespace }}  # ഏത് namespace-ൽ deploy ചെയ്യണം
 
   annotations:
+    # ALB internet-facing (public access)
     alb.ingress.kubernetes.io/scheme: internet-facing
+
+    # ALB target = Pod IP (Node അല്ല)
     alb.ingress.kubernetes.io/target-type: ip
+
+    # ALB listener ports configure ചെയ്യുന്നു
+    # HTTP (80) + HTTPS (443)
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+
+    # ACM certificate attach ചെയ്യുന്നു (HTTPS enable)
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn }}
+
+    # HTTP → HTTPS redirect force ചെയ്യുന്നു
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+
+    # Domain name map ചെയ്യാൻ (external-dns controller use ചെയ്താൽ auto DNS create ചെയ്യും)
     external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.host }}
 
 spec:
+  # ഏത് ingress controller use ചെയ്യണം (AWS ALB controller)
   ingressClassName: alb
 
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.ingress.host }}   # Domain name (example: api.techianadict.online)
+
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /                     # root path (all requests)
+            pathType: Prefix            # prefix match ("/" means everything)
+
             backend:
               service:
-                name: airline-backend-service
+                name: airline-backend-service   # Service name (traffic forward ചെയ്യുന്നു)
                 port:
-                  number: {{ .Values.service.port }}
+                  number: {{ .Values.service.port }}  # Service port (5000)
